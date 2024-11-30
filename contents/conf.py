@@ -32,3 +32,12 @@ exclude_patterns = []
 
 html_theme = "bizstyle"
 html_static_path = ["_static"]
+html_sidebars = {
+    "**": [
+        "localtoc.html",
+        "relations.html",
+        "sourcelink.html",
+        "searchbox.html",
+        "links.html",
+    ],
+}
