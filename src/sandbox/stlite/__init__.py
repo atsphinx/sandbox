@@ -44,7 +44,6 @@ def visit_stlite(self, node: stlite):
     app: Sphinx = self.builder.app
     widget_uri = f"_widgets/{node['id']}"
     out = app.outdir / widget_uri / "index.html"
-    print(node.document)
     docname = app.env.path2doc(node.document["source"])
     widget_url = app.builder.get_relative_uri(docname, widget_uri)
     out.parent.mkdir(exist_ok=True, parents=True)
