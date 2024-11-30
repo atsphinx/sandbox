@@ -14,14 +14,14 @@ STLITE_VERSION = "0.73.0"
 page_template = Template((Path(__file__).parent / "page.html.jinja").read_text())
 view_template = Template("""
   <div id="{{ id }}__div" style="position: relative;">
-    <iframe id="{{ id }}__iframe" src="/_widgets/{{ id }}.html" frameborder="0"></iframe>
+    <iframe id="{{ id }}__iframe" src="{{ url }}" frameborder="0"></iframe>
   </div>
   <script>
     const iframe = document.getElementById('{{ id }}__iframe');
     const div = document.getElementById('{{ id }}__div');
     iframe.style.width = `${div.scrollWidth}px`;
     window.addEventListener("message", (event, origin) => {
-      const url = new URL('/_widgets/{{ id }}.html', location);
+      const url = new URL('{{ url }}', location);
       if (event.source.location.toString() !== url.toString()) {
         return;
       }
@@ -42,10 +42,14 @@ class stlite(nodes.Element, nodes.General):
 def visit_stlite(self, node: stlite):
     """Inject br tag (html only)."""
     app: Sphinx = self.builder.app
-    out = app.outdir / "_widgets" / f"{node['id']}.html"
+    widget_uri = f"_widgets/{node['id']}"
+    out = app.outdir / widget_uri / "index.html"
+    print(node.document)
+    docname = app.env.path2doc(node.document["source"])
+    widget_url = app.builder.get_relative_uri(docname, widget_uri)
     out.parent.mkdir(exist_ok=True, parents=True)
     out.write_text(page_template.render(node.attributes))
-    self.body.append(view_template.render(node.attributes))
+    self.body.append(view_template.render(node.attributes, url=widget_url))
 
 
 class Stlite(Directive):
