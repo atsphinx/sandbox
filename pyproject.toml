@@ -4,4 +4,12 @@ version = "0.0.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "sphinx>=7.4.7",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "esbonio>=0.16.5",
+    "ruff>=0.8.1",
+]
