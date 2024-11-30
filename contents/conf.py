@@ -20,6 +20,7 @@ extensions = [
     # Third-party extensions
     # Sandbox extensions
     "sandbox",
+    "sandbox.stlite",
 ]
 
 templates_path = ["_templates"]
