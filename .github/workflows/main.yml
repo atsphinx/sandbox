@@ -1,0 +1,40 @@
+name: 'Run CI jobs'
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: 'Configure dependencies'
+        run: |
+          uv sync --frozen --all-extras
+      - name: 'Run linters'
+        run: |
+          lefthook run pre-commit --all-files
+  site-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Run tests
+        run: |
+          task build-linkcheck
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Build package
+        run: |
+          uv build
+          ls -l dist
